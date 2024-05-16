@@ -1,46 +1,50 @@
-package hardcodedecrypt;
-
-import java.math.BigInteger;
-
-
-public class HardcodeDecrypt {
+package blockcypherdecrypt;
+import java.util.Scanner;
+public class BlockCypherDecrypt {
 
 public static void main(String[] args) {
-  String encryptedHex = "c195c191be8fa190"; //encrypted hex message
+  	Scanner getEncryptedHex = new Scanner(System.in);
+   	System.out.println("Enter Encrypted Text: ");
+   	String encryptedHex = getEncryptedHex.nextLine(); //encrypted hex message
 	String key = "10001001"; //initial vector
 	String nextKey = "";	//key used for next block
 	String messageBin = ""; //original message in binary
-	String encryptedBin = ""; //encrypted binary message
-  String message = ""; //original message
+   	String message = ""; //original message
 	
 	for(int i = 0; i < encryptedHex.length(); i++)
 	{
-            char temp = encryptedHex.charAt(i);
+	    //get 2 characters from input
+            char temp = encryptedHex.charAt(i); 
             char temp2 = encryptedHex.charAt(i+1);
+	    //convert to hex
             String Hex = Character.toString(temp) + Character.toString(temp2);
             System.out.println(Hex);
             i++;
-            
+
+            //convert to binary
             int decimal = Integer.parseInt(Hex, 16);
             String binaryString = Integer.toBinaryString(decimal);
             System.out.println(binaryString);
             
-            if(nextKey == "")
+            if(nextKey == "") //Initializes the first key value into next key for the XOR to flow.
             {
                 nextKey = key;
             }
-            
+
+	    //Do XOR to get unencrypted binary
             int XOR = Integer.parseInt(binaryString,2) ^ Integer.parseInt(nextKey,2);
             String testKey = Integer.toBinaryString(XOR);
             testKey = String.format("%8s", testKey).replace(' ', '0');
             nextKey = binaryString;
-            
+
+	    //convert back into character values
             int temp3 = Integer.parseInt(testKey,2);
             messageBin = Integer.toHexString(temp3);
             int charValue = Integer.parseInt(messageBin,16);
             char character = (char) charValue;
             message += character;
 	} 
+	//print unencrypted message.
         System.out.println(message);     
 }
 }
