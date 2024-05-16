@@ -1,0 +1,70 @@
+//***********************************************************************
+//Encodes a string of ascii characters to hex format using a block cipher.
+//After the given initial vector each 8 bit block will be encrypted using the //previous 8 bits.
+//Program displays the final encrypted hex message.
+//***********************************************************************
+
+import java.util.Scanner;
+public class BlockCipherEncrypt
+{
+    
+public static void main(String[] args) 
+    {   
+        Scanner getMessage = new Scanner(System.in);
+        System.out.println("Enter your message");
+        String message = getMessage.nextLine(); //original message
+
+	    String key = "10001001"; //initial vector
+	    String nextKey = "";	//key used for next block
+	    String encryptedBin = ""; //encrypted binary message
+	    String encryptedHex = ""; //encrypted hex message
+        String binaryStringFinal = ""; //Used to print full binary string of message
+        String XORComplete = ""; //Used to print full binary string after the exclusive or
+                
+        System.out.println("Encrypting \""+ message +"\" using initial vector \"" + key +"\".");
+
+                //convert original message to binary
+                for(int i = 0; i < message.length(); i ++)
+                {
+                    System.out.println("Binary Conversion:");
+                    int C = message.charAt(i);
+                    String format = "%0" + 8 + "d";
+                    String binaryString = Integer.toBinaryString(C);
+                    binaryString = String.format(format, Integer.parseInt(binaryString));
+                    binaryStringFinal += binaryString + " ";
+                    System.out.println(binaryString + "\n");
+                //end convert to binary
+		
+		
+		
+		        //XOR in 8 bit blocks beginning with initial vector
+	    	    //current 8 bit block becomes key for next block
+
+                //XOR key and plaintext binary
+                    if(nextKey == "")
+                    {
+                        nextKey = key;
+                    }
+                    System.out.println("Exclusive OR:");
+                    int XOR = Integer.parseInt(nextKey,2) ^ Integer.parseInt(binaryString,2);
+                    nextKey = Integer.toBinaryString(XOR);
+                    XORComplete += nextKey + " ";
+                    System.out.println(nextKey + "\n");
+                    //end of xor
+		
+                    //convert encrypted binary string to hex string
+                    System.out.println("Hex Conversion:");
+                    int temp = Integer.parseInt(nextKey,2);
+                    encryptedBin = Integer.toHexString(temp);
+                    System.out.println(encryptedBin + "\n");
+                    
+                    encryptedHex += encryptedBin;
+                    //end convert to hex
+                }
+//Print the binary conversion, the exclusive or, and then the final encrypted message.         
+System.out.println("Binary Conversion:\n" + binaryStringFinal);  
+System.out.println("Exclusive OR:\n" + XORComplete);
+System.out.println("Encrypted Message:\n" + encryptedHex);
+
+	}//end main()
+}//end BlockCipher.java
